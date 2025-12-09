@@ -28,10 +28,10 @@ export interface SocialLink {
   icon: 'instagram' | 'mail' | 'whatsapp' | 'generic';
 }
 
-export interface GamingPlatform {
+export interface AccountLink {
   name: string;
   id: string;
-  iconType: 'steam' | 'epic' | 'psn' | 'xbox' | 'discord';
+  iconType: 'steam' | 'epic' | 'psn' | 'xbox' | 'discord' | 'instagram';
   username: string;
   url?: string;
 }

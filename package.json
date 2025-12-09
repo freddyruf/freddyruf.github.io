@@ -1,5 +1,5 @@
 {
-  "name": "federico-ruffini-portfolio",
+  "name": "copy-of-copy-of-federico-ruffini-portfolio-export",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "lucide-react": "^0.556.0",
-    "react-dom": "^19.2.1",
     "react": "^19.2.1"
   },
   "devDependencies": {

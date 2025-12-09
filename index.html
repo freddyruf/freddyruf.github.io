@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Federico Ruffini</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -14,57 +15,506 @@
               mono: ['Fira Code', 'monospace'],
             },
             colors: {
-              background: '#0a0a0a',
+              background: '#000000',
               surface: '#121212',
-              surfaceHighlight: '#1E1E1E',
-              border: '#333333',
-              primary: '#3b82f6', // Electric Blue
-              accent: '#10b981', // Emerald
             }
           }
         }
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
+      /* Base Styles */
+      html {
+        overflow-y: overlay;
+        scrollbar-gutter: stable both-edges;
+      }
       body {
-        background-color: #050505;
-        color: #e5e5e5;
+        background-color: #000000;
+        color: #ffffff;
+        overflow-x: hidden;
+        width: 100%;
+        cursor: default;
       }
-      .bento-card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-      .bento-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-      }
+
       /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0a0a0a;
-      }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb {
-        background: #333;
+        background-color: rgba(51, 51, 51, 0.5);
         border-radius: 4px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+        transition: background-color 0.2s;
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
+      ::-webkit-scrollbar-thumb:hover { background-color: rgba(100, 100, 100, 0.8); }
+
+      /* Desktop Cursor Styles */
+      @media (min-width: 768px) {
+        body { cursor: none; }
+        .custom-cursor {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background-color: white;
+          mix-blend-mode: difference;
+          pointer-events: none;
+          z-index: 9999;
+          transform: translate(-50%, -50%);
+          transition: transform 0.075s ease-out;
+        }
+      }
+
+      /* Animations */
+      .stroke-text {
+        -webkit-text-stroke: 1px white;
+        color: transparent;
+      }
+      
+      .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1s ease-out;
+      }
+      .reveal-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      .animate-slide-in {
+        animation: slideIn 0.5s forwards;
+        opacity: 0;
+      }
+
+      /* Utilities */
+      .glass-nav {
+        background-color: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
       }
     </style>
   <script type="importmap">
 {
   "imports": {
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1"
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
   <body>
-    <div id="root"></div>
-  </body>
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor" class="custom-cursor hidden md:block"></div>
+
+    <!-- Fixed Header -->
+    <header class="fixed top-0 left-0 w-full p-4 md:p-10 flex justify-between items-start z-50 mix-blend-exclusion pointer-events-none">
+       <div class="flex flex-col pointer-events-auto">
+          <span class="text-[10px] md:text-xs font-mono opacity-50 text-white">PORTFOLIO '25</span>
+          <span class="font-bold tracking-tighter text-sm md:text-base text-white">FEDERICO RUFFINI</span>
+       </div>
+
+       <!-- Desktop Nav -->
+       <nav class="hidden md:flex flex-col text-right text-xs font-mono space-y-1 glass-nav p-2 rounded pointer-events-auto">
+           <a href="#work" class="text-white hover:text-gray-400 transition-colors cursor-pointer">WORK</a>
+           <a href="#education" class="text-white hover:text-gray-400 transition-colors cursor-pointer">EDUCATION</a>
+           <a href="#projects" class="text-white hover:text-gray-400 transition-colors cursor-pointer">PROJECTS</a>
+           <a href="#accounts" class="text-white hover:text-gray-400 transition-colors cursor-pointer">ACCOUNTS</a>
+           <a href="#contact" class="text-white hover:text-gray-400 transition-colors cursor-pointer">CONTACT</a>
+       </nav>
+
+       <!-- Mobile Menu Toggle -->
+       <button id="menu-toggle" class="md:hidden pointer-events-auto text-white mix-blend-difference z-50 active:scale-90 transition-transform p-2">
+          <i data-lucide="menu" id="menu-icon" width="28" height="28"></i>
+       </button>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-zinc-950 flex flex-col justify-center items-center transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -translate-y-full pointer-events-none">
+        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
+        <nav id="mobile-nav-links" class="flex flex-col space-y-6 md:space-y-8 relative z-10 text-center px-6">
+           <!-- Links injected via JS -->
+        </nav>
+        <div class="absolute bottom-10 text-xs font-mono text-gray-500 uppercase tracking-widest">
+           Menu / Navigation
+        </div>
+    </div>
+
+    <main class="relative z-10">
+       
+       <!-- Hero Section -->
+       <section class="h-screen flex flex-col justify-end p-4 md:p-10 pb-20 border-b border-white/10 relative overflow-hidden">
+           <div id="hero-gradient" class="absolute inset-0 pointer-events-none"></div>
+           
+           <div class="space-y-4 relative z-10">
+              <div class="reveal-on-scroll">
+                  <h1 class="text-[14vw] leading-[0.8] font-black tracking-tighter uppercase mix-blend-normal break-words">
+                  Create<br/>
+                  <span class="stroke-text hover:text-white active:text-white transition-all duration-700 ease-out">Innovate</span><br/>
+                  Play
+                  </h1>
+              </div>
+              
+              <div class="flex flex-col md:flex-row md:items-end justify-between mt-6 md:mt-10 w-full border-t border-white pt-6">
+                  <div class="reveal-on-scroll" style="transition-delay: 200ms;">
+                      <p class="max-w-md text-base md:text-xl font-light leading-tight pr-4">
+                        I am a positive guy, I like to be active all the time and I hate not having anything to do. I love literature, cinema, photography, and video games. I appreciate the small moments of daily life and I am open to any kind of experience.
+                      </p>
+                  </div>
+                  <div class="animate-bounce mt-8 md:mt-0 self-start md:self-auto">
+                     <i data-lucide="arrow-down" class="w-6 h-6 md:w-8 md:h-8"></i>
+                  </div>
+              </div>
+           </div>
+       </section>
+
+       <!-- Work Experience -->
+       <section id="work" class="min-h-[60vh] p-4 md:p-10 flex flex-col md:flex-row gap-12 md:gap-20 border-b border-gray-900 scroll-mt-24">
+           <div class="md:w-1/3 md:sticky md:top-32 h-fit flex flex-col items-start gap-4 md:gap-6">
+              <div class="reveal-on-scroll">
+                  <h2 class="text-3xl md:text-4xl font-bold uppercase mb-2 md:mb-4">Work<br/>Experience</h2>
+                  <p class="text-xs md:text-sm font-mono text-gray-400">Professional path & Internships</p>
+              </div>
+           </div>
+           
+           <div class="md:w-2/3 space-y-16 md:space-y-24 pt-4 md:pt-10" id="work-list">
+              <!-- Injected via JS -->
+           </div>
+       </section>
+
+       <!-- Education -->
+       <section id="education" class="min-h-[50vh] p-4 md:p-10 flex flex-col md:flex-row gap-12 md:gap-20 border-b border-gray-900 scroll-mt-24">
+           <div class="md:w-1/3 md:sticky md:top-32 h-fit">
+              <div class="reveal-on-scroll">
+                  <h2 class="text-3xl md:text-4xl font-bold uppercase mb-2 md:mb-4">Education</h2>
+                  <p class="text-xs md:text-sm font-mono text-gray-400">Academic achievements & Certifications</p>
+              </div>
+           </div>
+           
+           <div class="md:w-2/3 space-y-16 md:space-y-24 pt-4 md:pt-10" id="edu-list">
+              <!-- Injected via JS -->
+           </div>
+       </section>
+
+       <!-- CV Download -->
+       <section class="py-20 md:py-32 flex flex-col items-center justify-center relative overflow-hidden bg-zinc-950">
+          <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
+          
+          <div class="reveal-on-scroll w-full px-4 flex justify-center">
+              <button onclick="alert('Downloading CV: Federico_Ruffini_CV.pdf')" 
+                class="relative group w-[90%] md:w-full max-w-5xl h-24 md:h-48 border-2 border-white flex items-center justify-center overflow-hidden transition-all md:hover:scale-[1.01] active:scale-[0.98] active:border-gray-400">
+                
+                <div class="absolute inset-0 bg-white translate-y-full md:group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
+                <div class="absolute inset-0 opacity-0 md:group-hover:opacity-10 group-active:opacity-10" style="background: linear-gradient(45deg,rgba(0,0,0,0.1) 25%,transparent 25%,transparent 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1) 75%,transparent 75%,transparent); background-size: 10px 10px;"></div>
+
+                <div class="relative z-10 flex items-center gap-3 md:gap-8 mix-blend-difference text-white md:group-hover:text-white">
+                    <i data-lucide="file-text" class="w-8 h-8 md:w-16 md:h-16 shrink-0"></i>
+                    <span class="text-3xl md:text-7xl font-black uppercase tracking-tighter whitespace-nowrap">Download CV</span>
+                    <i data-lucide="download" class="w-8 h-8 md:w-16 md:h-16 opacity-0 -translate-x-10 md:group-hover:opacity-100 md:group-hover:translate-x-0 group-active:opacity-100 group-active:translate-x-0 transition-all duration-500 ease-out shrink-0"></i>
+                </div>
+              </button>
+          </div>
+          <p class="mt-4 font-mono text-[10px] md:text-xs text-gray-500 uppercase tracking-widest">Pdf Format • 2.4 MB</p>
+       </section>
+
+       <!-- Projects -->
+       <section id="projects" class="py-16 md:py-20 bg-white text-black scroll-mt-24 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden">
+           <div class="p-4 md:p-10 w-full max-w-[1920px] mx-auto">
+               <div class="reveal-on-scroll">
+                  <h2 class="text-[10vw] md:text-[10vw] font-black leading-none mb-8 md:mb-10 pb-4">PROJECTS</h2>
+               </div>
+               
+               <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-gray-200 border border-gray-200 w-full">
+                  <!-- Injected via JS -->
+               </div>
+           </div>
+       </section>
+
+       <!-- Accounts -->
+       <section id="accounts" class="min-h-[50vh] p-4 md:p-10 border-b border-white/10 relative scroll-mt-24">
+           <div class="absolute right-4 md:right-10 top-4 md:top-10 font-mono text-[10px] md:text-xs text-green-500 animate-pulse hidden md:block">
+             SYSTEM_STATUS: ONLINE<br/>
+             USER: FREDDYRUF
+           </div>
+           
+           <div class="reveal-on-scroll">
+              <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">ACCOUNTS</h2>
+           </div>
+           
+           <div id="accounts-list" class="space-y-2 font-mono">
+              <!-- Injected via JS -->
+           </div>
+       </section>
+
+       <!-- Contact -->
+       <section id="contact" class="min-h-[70vh] p-4 md:p-10 flex flex-col justify-between scroll-mt-24">
+          <div class="reveal-on-scroll">
+              <div>
+              <h2 class="text-[12vw] md:text-[8vw] font-bold leading-none tracking-tighter">
+                  LET'S<br/>CONNECT
+              </h2>
+              </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12 md:mt-20">
+             <div class="reveal-on-scroll" style="transition-delay: 100ms;">
+                <div>
+                    <h3 class="text-xs md:text-sm font-mono text-gray-500 mb-4">SOCIALS</h3>
+                    <div class="flex flex-col space-y-2 text-lg md:text-xl">
+                      <a href="https://instagram.com/freddyruf" target="_blank" rel="noreferrer" class="md:hover:pl-4 active:scale-95 transition-all duration-300 w-fit origin-left">Instagram</a>
+                    </div>
+                </div>
+             </div>
+             <div class="reveal-on-scroll" style="transition-delay: 200ms;">
+                <div>
+                    <h3 class="text-xs md:text-sm font-mono text-gray-500 mb-4">CONTACT</h3>
+                    <div class="flex flex-col space-y-2 text-lg md:text-xl">
+                      <a href="mailto:fede.celeste7@gmail.com" class="md:hover:pl-4 active:scale-95 transition-all duration-300 w-fit origin-left break-all">fede.celeste7@gmail.com</a>
+                      <span class="text-gray-400">+39 3924502802</span>
+                    </div>
+                </div>
+             </div>
+          </div>
+
+          <div class="mt-12 md:mt-20 pt-10 border-t border-white/20 flex justify-between items-end">
+             <span class="text-[12vw] md:text-[5vw] leading-none font-black opacity-10">RUFFINI</span>
+          </div>
+       </section>
+    </main>
+
+    <!-- Main Logic Script -->
+    <script>
+      // --- DATA ---
+      const WORK_EXPERIENCE = [
+        { id: "work-1", role: "Social Media and Photography", company: "Prensil s.a.s", period: "10/11/2018 – Current", description: "Social media management and professional photography." },
+        { id: "work-2", role: "Internship (Safety PLCs)", company: "Fameccanica s.p.a (Angelini Group)", period: "03/07/2023 – 18/07/2023", description: "Training experience on safety PLCs and the entire occupational safety system." }
+      ];
+
+      const EDUCATION = [
+        { id: "edu-1", role: "Academic Degree", company: "UNICAM", period: "28/09/2024 – Current", description: "University Student." },
+        { id: "edu-2", role: "High School Diploma in IT", company: "IIS A. Volta", period: "09/09/2019 – 07/06/2024", description: "EQF Level 4." }
+      ];
+
+      const PROJECTS = [
+        { id: "proj-1", title: "National Hackathon", period: "01/06/2022 – 06/06/2022", description: "Best team and innovation awards." },
+        { id: "proj-2", title: "Nao Challenge", period: "01/01/2023 – 20/05/2023", description: "Challenge of Robotics." },
+        { id: "proj-3", title: "MakeX", period: "10/03/2021 – 16/05/2021", description: "Challenge of robotics." },
+        { id: "proj-4", title: "Olympics of IT", period: "09/11/2021 – 20/12/2023", description: "IT Competition." }
+      ];
+
+      const ACCOUNTS = [
+        { name: "Steam", id: "steam-1", iconType: "steam", username: "FreddyRuf", url: "https://steamcommunity.com/id/freddyruf/" },
+        { name: "Epic Games", id: "epic-1", iconType: "epic", username: "Freddy Ruf", url: "https://store.epicgames.com/it/" },
+        { name: "Discord", id: "discord-1", iconType: "discord", username: "freddyruf", url: "https://discord.gg/yAwzrg9fY6" },
+        { name: "Instagram", id: "insta-1", iconType: "instagram", username: "freddyruf", url: "https://www.instagram.com/freddyruf/" }
+      ];
+
+      // --- RENDER FUNCTIONS ---
+      
+      // Render List Items (Work/Edu)
+      function renderList(items, containerId) {
+        const container = document.getElementById(containerId);
+        items.forEach((item, idx) => {
+          const div = document.createElement('div');
+          div.className = 'reveal-on-scroll';
+          div.style.transitionDelay = `${idx * 100}ms`;
+          div.innerHTML = `
+             <div class="group relative border-t border-gray-800 pt-6 md:pt-8 md:hover:border-white transition-colors duration-500 active:border-white">
+                <span class="absolute -top-3 left-0 bg-black px-2 font-mono text-xs text-gray-500">0${idx + 1}</span>
+                <h3 class="text-2xl md:text-5xl font-bold uppercase mb-2 md:group-hover:pl-4 transition-all duration-300 break-words">${item.role}</h3>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-2 mb-4">
+                   <span class="text-lg md:text-xl text-gray-300">${item.company}</span>
+                   <span class="font-mono text-xs md:text-sm border border-gray-800 rounded-full px-3 py-1 w-fit">${item.period}</span>
+                </div>
+                <p class="text-gray-400 max-w-xl text-base md:text-lg md:group-hover:text-white transition-colors">${item.description}</p>
+             </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Render Projects
+      function renderProjects() {
+        const container = document.getElementById('project-grid');
+        PROJECTS.forEach((proj, idx) => {
+          const div = document.createElement('div');
+          div.className = 'reveal-on-scroll h-full';
+          div.style.transitionDelay = `${idx * 100}ms`;
+          div.innerHTML = `
+            <div class="group p-6 md:p-10 min-h-[250px] md:h-80 flex flex-col justify-between bg-white md:hover:bg-black md:hover:text-white active:bg-black active:text-white transition-colors duration-300 cursor-default h-full">
+                <div>
+                  <div class="flex justify-between items-start">
+                    <h3 class="text-xl md:text-2xl font-bold uppercase break-words pr-2">${proj.title}</h3>
+                    <i data-lucide="arrow-right" class="opacity-0 md:group-hover:opacity-100 group-active:opacity-100 transition-opacity shrink-0"></i>
+                  </div>
+                  <p class="mt-2 md:mt-4 font-mono text-xs md:text-sm opacity-60">${proj.period}</p>
+                </div>
+                <p class="text-base md:text-lg font-medium mt-4 md:mt-0 relative z-10">${proj.description}</p>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Render Accounts
+      function renderAccounts() {
+        const container = document.getElementById('accounts-list');
+        ACCOUNTS.forEach((acc, idx) => {
+          const div = document.createElement('div');
+          div.className = 'reveal-on-scroll';
+          div.style.transitionDelay = `${idx * 100}ms`;
+          
+          const tagName = acc.url ? 'a' : 'div';
+          const hrefAttr = acc.url ? `href="${acc.url}" target="_blank" rel="noopener noreferrer"` : '';
+          
+          div.innerHTML = `
+            <${tagName} ${hrefAttr} class="flex items-center justify-between border-b border-white/20 py-4 md:hover:bg-white/5 active:bg-white/10 transition-colors group cursor-pointer block w-full">
+               <div class="flex items-center gap-2 md:gap-4 flex-1 min-w-0 pointer-events-none">
+                  <span class="text-gray-500 text-[10px] md:text-sm w-24 md:w-32 shrink-0 text-left">[${acc.iconType.toUpperCase()}]</span>
+                  <span class="text-lg sm:text-xl md:text-2xl uppercase md:group-hover:translate-x-4 transition-transform duration-300 break-words whitespace-normal min-w-0">
+                    ${acc.name}
+                  </span>
+               </div>
+               <div class="flex items-center gap-4 shrink-0 pl-4">
+                  <span class="hidden md:block text-gray-400 pointer-events-none">${acc.username}</span>
+                  <div class="copy-btn p-2 border border-white/30 hover:bg-white hover:text-black active:scale-95 transition-all" data-username="${acc.username}">
+                    <i data-lucide="copy" width="16" height="16"></i>
+                  </div>
+               </div>
+            </${tagName}>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Render Mobile Nav Links
+      function renderMobileNav() {
+        const container = document.getElementById('mobile-nav-links');
+        const items = ['WORK', 'EDUCATION', 'PROJECTS', 'ACCOUNTS', 'CONTACT'];
+        items.forEach((item, idx) => {
+          const a = document.createElement('a');
+          a.href = `#${item.toLowerCase()}`;
+          a.className = `mobile-link text-4xl sm:text-5xl font-black tracking-tighter uppercase stroke-text hover:text-white transition-all duration-300 transform translate-x-0 active:scale-95`;
+          a.style.animationDelay = `${idx * 100}ms`;
+          a.textContent = item;
+          a.addEventListener('click', () => toggleMenu(false));
+          container.appendChild(a);
+        });
+      }
+
+      // --- INTERACTIONS ---
+
+      // Custom Cursor
+      document.addEventListener('mousemove', (e) => {
+        const cursor = document.getElementById('custom-cursor');
+        if (cursor) {
+          cursor.style.left = `${e.clientX}px`;
+          cursor.style.top = `${e.clientY}px`;
+        }
+        
+        // Update hero radial gradient position
+        const hero = document.getElementById('hero-gradient');
+        if (hero) {
+          hero.style.background = `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(255,255,255,0.1), transparent 25%)`;
+        }
+      });
+
+      // Scroll Reveal Observer
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      // Mobile Menu Logic
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      let isMenuOpen = false;
+
+      function toggleMenu(forceState) {
+        if (typeof forceState === 'boolean') {
+          isMenuOpen = forceState;
+        } else {
+          isMenuOpen = !isMenuOpen;
+        }
+
+        if (isMenuOpen) {
+          mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+          mobileMenu.classList.add('opacity-100', 'translate-y-0');
+          document.body.style.overflow = 'hidden';
+          // Trigger animations on links
+          document.querySelectorAll('.mobile-link').forEach(link => {
+            link.classList.add('animate-slide-in');
+          });
+          // Update icon to X
+          menuIcon.setAttribute('data-lucide', 'x');
+        } else {
+          mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+          mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+          document.body.style.overflow = 'unset';
+          document.querySelectorAll('.mobile-link').forEach(link => {
+            link.classList.remove('animate-slide-in');
+          });
+          // Update icon to Menu
+          menuIcon.setAttribute('data-lucide', 'menu');
+        }
+        lucide.createIcons();
+      }
+
+      menuToggle.addEventListener('click', () => toggleMenu());
+
+      // Clipboard Logic
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.copy-btn');
+        if (btn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const username = btn.dataset.username;
+          navigator.clipboard.writeText(username).then(() => {
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="check" width="16" height="16"></i>';
+            lucide.createIcons();
+            setTimeout(() => {
+              btn.innerHTML = '<i data-lucide="copy" width="16" height="16"></i>';
+              lucide.createIcons();
+            }, 2000);
+          });
+        }
+      });
+
+      // --- INITIALIZATION ---
+      window.addEventListener('DOMContentLoaded', () => {
+        renderList(WORK_EXPERIENCE, 'work-list');
+        renderList(EDUCATION, 'edu-list');
+        renderProjects();
+        renderAccounts();
+        renderMobileNav();
+        
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Observe elements
+        setTimeout(() => {
+          document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        }, 100);
+      });
+
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

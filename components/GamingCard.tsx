@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { GamingPlatform } from '../types';
-import { Gamepad2, Monitor, Disc, Copy, Check } from 'lucide-react';
+import { AccountLink } from '../types';
+import { Gamepad2, Monitor, Disc, Copy, Check, Instagram } from 'lucide-react';
 
 // Since Lucide doesn't have all brand icons, we use stylized placeholders or text
 const PlatformIcon = ({ type }: { type: string }) => {
@@ -10,11 +10,12 @@ const PlatformIcon = ({ type }: { type: string }) => {
     case 'xbox': return <Gamepad2 className="w-6 h-6 text-green-500" />;
     case 'epic': return <div className="w-6 h-6 font-black text-white bg-black rounded flex items-center justify-center text-[10px]">E</div>;
     case 'discord': return <div className="w-6 h-6 font-bold text-indigo-400 flex items-center justify-center text-xs">Ds</div>;
+    case 'instagram': return <Instagram className="w-6 h-6 text-pink-500" />;
     default: return <Gamepad2 className="w-6 h-6 text-gray-400" />;
   }
 };
 
-export const GamingCard: React.FC<{ platforms: GamingPlatform[] }> = ({ platforms }) => {
+export const GamingCard: React.FC<{ platforms: AccountLink[] }> = ({ platforms }) => {
   const [copied, setCopied] = useState<string | null>(null);
 
   const handleCopy = (text: string, id: string) => {

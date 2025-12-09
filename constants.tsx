@@ -1,4 +1,4 @@
-import { ExperienceItem, ProjectItem, LanguageSkill, GamingPlatform, SocialLink } from './types';
+import { ExperienceItem, ProjectItem, LanguageSkill, AccountLink, SocialLink } from './types';
 import { 
   Instagram, 
   Mail, 
@@ -17,7 +17,7 @@ export const PERSONAL_INFO = {
   name: "Federico Ruffini",
   tagline: "Tech Enthusiast | Photographer | Gamer",
   location: "Chieti / Pescara, Italy",
-  bio: "Sono un ragazzo positivo, mi piace essere attivo e odio non avere nulla da fare. Amo la letteratura, il cinema, la fotografia e i videogiochi. Apprezzo i piccoli momenti della vita quotidiana e sono aperto a ogni tipo di esperienza.",
+  bio: "I am a positive guy, I like to be active all the time and I hate not having anything to do. I love literature, cinema, photography, and video games. I appreciate the small moments of daily life and I am open to any kind of experience.",
   email: "fede.celeste7@gmail.com",
   phone: "+39 3924502802",
   instagram: "freddyruf"
@@ -29,8 +29,8 @@ export const WORK_EXPERIENCE: ExperienceItem[] = [
     role: "Social Media and Photography",
     company: "Prensil s.a.s",
     location: "Chieti, Italy",
-    period: "10/11/2018 – Attuale",
-    description: "Gestione social media e fotografia professionale.",
+    period: "10/11/2018 – Current",
+    description: "Social media management and professional photography.",
     type: "work"
   },
   {
@@ -39,7 +39,7 @@ export const WORK_EXPERIENCE: ExperienceItem[] = [
     company: "Fameccanica s.p.a (Angelini Group)",
     location: "San Giovanni Teatino, Italy",
     period: "03/07/2023 – 18/07/2023",
-    description: "Esperienza di formazione su PLC di sicurezza e sull'intero sistema di sicurezza sul lavoro.",
+    description: "Training experience on safety PLCs and the entire occupational safety system.",
     type: "work"
   }
 ];
@@ -47,20 +47,20 @@ export const WORK_EXPERIENCE: ExperienceItem[] = [
 export const EDUCATION: ExperienceItem[] = [
   {
     id: "edu-1",
-    role: "Accademic Degree",
+    role: "Academic Degree",
     company: "UNICAM",
     location: "Camerino, Italy",
-    period: "28/09/2024 – Attuale",
-    description: "Studente universitario.",
+    period: "28/09/2024 – Current",
+    description: "University Student.",
     type: "education"
   },
   {
     id: "edu-2",
-    role: "Diploma di Scuola Superiore in IT",
+    role: "High School Diploma in IT",
     company: "IIS A. Volta",
     location: "Pescara, Italy",
     period: "09/09/2019 – 07/06/2024",
-    description: "Livello EQF 4.",
+    description: "EQF Level 4.",
     type: "education"
   }
 ];
@@ -88,38 +88,38 @@ export const PROJECTS: ProjectItem[] = [
     id: "proj-4",
     title: "Olympics of IT",
     period: "09/11/2021 – 20/12/2023",
-    description: "Competizione informatica."
+    description: "IT Competition."
   }
 ];
 
-export const GAMING_LINKS: GamingPlatform[] = [
+export const ACCOUNTS: AccountLink[] = [
   {
     name: "Steam",
     id: "steam-1",
     iconType: "steam",
-    username: "freddyruf",
-    url: "#" 
+    username: "FreddyRuf",
+    url: "https://steamcommunity.com/id/freddyruf/" 
   },
   {
     name: "Epic Games",
     id: "epic-1",
     iconType: "epic",
-    username: "freddy_ruf",
-    url: "#"
+    username: "Freddy Ruf",
+    url: "https://store.epicgames.com/it/"
   },
   {
     name: "Discord",
     id: "discord-1",
     iconType: "discord",
-    username: "freddyruf#0000",
-    url: "#"
+    username: "freddyruf",
+    url: "https://discord.gg/yAwzrg9fY6"
   },
   {
-    name: "PSN",
-    id: "psn-1",
-    iconType: "psn",
-    username: "FreddyRuf",
-    url: "#"
+    name: "Instagram",
+    id: "insta-1",
+    iconType: "instagram",
+    username: "freddyruf",
+    url: "https://www.instagram.com/freddyruf/"
   }
 ];
 
@@ -132,6 +132,6 @@ export const HOBBIES = [
 ];
 
 export const LANGUAGES: LanguageSkill[] = [
-  { language: "Italian", level: "Madrelingua" },
+  { language: "Italian", level: "Native Speaker" },
   { language: "English", level: "B1", details: "Listening, Reading, Spoken, Written" }
 ];

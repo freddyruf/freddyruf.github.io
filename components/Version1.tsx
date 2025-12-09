@@ -6,7 +6,7 @@ import {
   WORK_EXPERIENCE, 
   EDUCATION, 
   PROJECTS, 
-  GAMING_LINKS, 
+  ACCOUNTS, 
   HOBBIES, 
   LANGUAGES
 } from '../constants';
@@ -98,9 +98,9 @@ export const Version1: React.FC = () => {
             </div>
         </BentoCard>
 
-        {/* 2. Gaming Hub */}
-        <BentoCard colSpan={1} rowSpan={2} title="Gaming Hub" className="bg-gradient-to-b from-indigo-950/20 to-surface">
-           <GamingCard platforms={GAMING_LINKS} />
+        {/* 2. Accounts Hub */}
+        <BentoCard colSpan={1} rowSpan={2} title="Link Hub" className="bg-gradient-to-b from-indigo-950/20 to-surface">
+           <GamingCard platforms={ACCOUNTS} />
         </BentoCard>
 
         {/* 3. Latest Status / Current Focus */}
