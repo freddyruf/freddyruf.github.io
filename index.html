@@ -118,6 +118,11 @@
     <!-- Custom Cursor Element -->
     <div id="custom-cursor" class="custom-cursor hidden md:block"></div>
 
+    <!-- Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 z-[100] pointer-events-none mix-blend-difference">
+        <div id="scroll-progress" class="h-full bg-white w-0 transition-[width] duration-100 ease-out"></div>
+    </div>
+
     <!-- Fixed Header -->
     <header class="fixed top-0 left-0 w-full p-4 md:p-10 flex justify-between items-start z-50 mix-blend-exclusion pointer-events-none">
        <div class="flex flex-col pointer-events-auto">
@@ -212,7 +217,7 @@
           <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
           
           <div class="reveal-on-scroll w-full px-4 flex justify-center">
-              <button onclick="alert('Downloading CV: Federico_Ruffini_CV.pdf')" 
+              <button onclick="window.open('https://drive.google.com/uc?export=download&id=1mcRLViu5qMcKj8JyIa2FJ5ZqdMjdJCZz')" 
                 class="relative group w-[90%] md:w-full max-w-5xl h-24 md:h-48 border-2 border-white flex items-center justify-center overflow-hidden transition-all md:hover:scale-[1.01] active:scale-[0.98] active:border-gray-400">
                 
                 <div class="absolute inset-0 bg-white translate-y-full md:group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)]"></div>
@@ -356,7 +361,6 @@
                 <div>
                   <div class="flex justify-between items-start">
                     <h3 class="text-xl md:text-2xl font-bold uppercase break-words pr-2">${proj.title}</h3>
-                    <i data-lucide="arrow-right" class="opacity-0 md:group-hover:opacity-100 group-active:opacity-100 transition-opacity shrink-0"></i>
                   </div>
                   <p class="mt-2 md:mt-4 font-mono text-xs md:text-sm opacity-60">${proj.period}</p>
                 </div>
@@ -414,6 +418,17 @@
       }
 
       // --- INTERACTIONS ---
+
+      // Scroll Progress Bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        const progressBar = document.getElementById('scroll-progress');
+        if (progressBar) {
+          progressBar.style.width = scrolled + "%";
+        }
+      });
 
       // Custom Cursor
       document.addEventListener('mousemove', (e) => {
